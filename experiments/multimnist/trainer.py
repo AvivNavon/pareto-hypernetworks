@@ -9,7 +9,7 @@ from experiments.multimnist.models import PHNHyper, PHNTarget
 from experiments.multimnist.data import Dataset
 from experiments.multimnist.plot_utils import plot_multimnist
 from experiments.metrics import non_uniformity, min_norm, calc_hypervolume
-from solvers.epo import EPO
+from solvers.baseline_solvers import EPO
 
 
 def evaluate(hypernet, targetnet, loader, rays, device):
