@@ -1,1 +1,0 @@
-{"datapath": "data/multi_fashion.pickle", "n_epochs": 50, "ray_lower": 0.0, "ray_upper": 1.0, "no_cuda": false, "gpus": "0", "optim": "adam", "batch_size": 256, "lr": 0.0001, "solver": "epo", "eval_every": 1, "out_dir": "outputs/multi_fashion", "n_rays": 5, "fig_every": 5, "seed": 42}
