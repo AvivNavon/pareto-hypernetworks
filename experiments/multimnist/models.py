@@ -1,12 +1,12 @@
 from typing import List
 
 import torch
-from torch import nn
 import torch.nn.functional as F
+from torch import nn
 
 
 class PHNHyper(nn.Module):
-    """Modification of https://github.com/pytorch/examples/blob/master/mnist/main.py
+    """Hypernetwork
 
     """
 
@@ -73,7 +73,7 @@ class PHNHyper(nn.Module):
 
 
 class PHNTarget(nn.Module):
-    """Modification of https://github.com/pytorch/examples/blob/master/mnist/main.py
+    """Target network
 
     """
     def __init__(self, kernel_size, n_kernels=10, out_dim=10, target_hidden_dim=50, n_conv_layers=2, n_tasks=2):
@@ -124,79 +124,3 @@ class PHNTarget(nn.Module):
                 )
             )
         return logits
-
-
-class LeNet(torch.nn.Module):
-    def __init__(self, n_tasks):
-        super(LeNet, self).__init__()
-        self.n_tasks = n_tasks
-        self.conv1 = nn.Conv2d(1, 10, 9, 1)
-        self.conv2 = nn.Conv2d(10, 20, 5, 1)
-        self.fc1 = nn.Linear(5 * 5 * 20, 50)
-
-        for i in range(self.n_tasks):
-            setattr(self, 'task_{}'.format(i), nn.Linear(50, 10))
-
-    def shared_parameters(self):
-        return list([p for n, p in self.named_parameters() if 'task' not in n])
-
-    def forward(self, x, i=None):
-        x = F.relu(self.conv1(x))
-        x = F.max_pool2d(x, 2, 2)
-        x = F.relu(self.conv2(x))
-        x = F.max_pool2d(x, 2, 2)
-        x = x.view(-1, 5 * 5 * 20)
-        x = F.relu(self.fc1(x))
-
-        if i is not None:
-            layer_i = getattr(self, 'task_{}'.format(i))
-            return layer_i(x)
-
-        outs = []
-        for i in range(self.n_tasks):
-            layer = getattr(self, 'task_{}'.format(i))
-            outs.append(layer(x))
-
-        return torch.stack(outs, dim=0)
-
-
-class VanilaRayLeNet(torch.nn.Module):
-    def __init__(self, n_tasks):
-        super().__init__()
-        self.n_tasks = n_tasks
-        self.conv1 = nn.Conv2d(1, 10, 9, 1)
-        self.conv2 = nn.Conv2d(10, 20, 5, 1)
-
-        ray_hiddn = 100
-        self.ray_mlp = nn.Sequential(
-            nn.Linear(2, ray_hiddn),
-            nn.ReLU(),
-            nn.Linear(ray_hiddn, ray_hiddn)
-        )
-        self.fc1 = nn.Linear(ray_hiddn + 5 * 5 * 20, 50)
-
-        for i in range(self.n_tasks):
-            setattr(self, 'task_{}'.format(i), nn.Linear(50, 10))
-
-    def forward(self, x, ray, i=None):
-        x = F.relu(self.conv1(x))
-        x = F.max_pool2d(x, 2, 2)
-        x = F.relu(self.conv2(x))
-        x = F.max_pool2d(x, 2, 2)
-        x = x.view(-1, 5 * 5 * 20)
-        # concat ray
-        r = self.ray_mlp(ray)
-        rr = torch.cat(x.shape[0] * [r.unsqueeze(0)])
-        x = torch.cat((rr, x), dim=1)
-        x = F.relu(self.fc1(x))
-
-        if i is not None:
-            layer_i = getattr(self, 'task_{}'.format(i))
-            return layer_i(x)
-
-        outs = []
-        for i in range(self.n_tasks):
-            layer = getattr(self, 'task_{}'.format(i))
-            outs.append(layer(x))
-
-        return torch.stack(outs, dim=0)
