@@ -8,7 +8,7 @@
 Pareto HyperNetworks (PHN) learn the entire pareto front using a single model.
 
 <p align="center"> 
-    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/toy_pareto_front_many_rays.png" width="800">
+    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/toy_pf_ours.png" width="800">
 </p>  
 
 ## Install
