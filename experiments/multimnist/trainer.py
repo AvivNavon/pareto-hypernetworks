@@ -176,8 +176,8 @@ def train(
             loss.backward()
 
             epoch_iter.set_description(
-                f"total weighted loss: {loss.item():.3f}, loss 1: {l1.item():.3f}, loss 2: {l2.item():.3f},"
-                f"ray {ray.cpu().numpy().tolist()}"
+                f"total weighted loss: {loss.item():.3f}, loss 1: {l1.item():.3f}, loss 2: {l2.item():.3f}"
+                # f", ray {ray.cpu().numpy().tolist()}"
             )
 
             optimizer.step()
@@ -213,7 +213,7 @@ def train(
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='MultiMNIST')
     parser.add_argument('--datapath', type=str, default='data/multi_fashion_and_mnist.pickle', help='path to data')
-    parser.add_argument('--n-epochs', type=int, default=20, help='num. epochs')
+    parser.add_argument('--n-epochs', type=int, default=150, help='num. epochs')
     parser.add_argument('--ray-hidden', type=int, default=100, help='lower range for ray')
     parser.add_argument('--alpha', type=float, default=.2, help='alpha for dirichlet')
     parser.add_argument('--no-cuda', action='store_true', default=False, help='train on gpu')
