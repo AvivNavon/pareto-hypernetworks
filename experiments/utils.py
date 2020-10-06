@@ -40,11 +40,12 @@ def get_device(no_cuda=False, gpus='0'):
     return torch.device(f"cuda:{gpus}" if torch.cuda.is_available() and not no_cuda else "cpu")
 
 
-def save_args(folder, args, name='config.json'):
+def save_args(folder, args, name='config.json', check_exists=False):
     set_logger()
     path = Path(folder)
-    if path.exists():
-        logging.warning(f"folder {folder} already exists! old files might be lost.")
+    if check_exists:
+        if path.exists():
+            logging.warning(f"folder {folder} already exists! old files might be lost.")
     path.mkdir(parents=True, exist_ok=True)
 
     json.dump(
