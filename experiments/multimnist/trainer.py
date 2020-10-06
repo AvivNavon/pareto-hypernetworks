@@ -78,7 +78,7 @@ def train(
         alpha: float,
         no_val_eval: bool,
         out_dir: str,
-        device,
+        device: torch.device,
         eval_every: int,
 ) -> None:
     # ----

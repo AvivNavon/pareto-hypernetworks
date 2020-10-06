@@ -1,5 +1,5 @@
 # Pareto HyperNetworks 
-## Official implementation of _Learning The Pareto Front With HyperNetworks_ paper.
+### Official implementation of "_Learning The Pareto Front With HyperNetworks_"
 
 <p align="center"> 
     <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/mnist/resources/phn.png" width="500">

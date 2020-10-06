@@ -6,5 +6,3 @@ tqdm>=4.45.0
 cvxpy
 cvxopt
 scikit-learn
-pandas
-pymoo
