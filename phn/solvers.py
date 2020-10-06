@@ -1,10 +1,9 @@
 from abc import abstractmethod
 
-import numpy as np
-import cvxpy as cp
 import cvxopt
+import cvxpy as cp
+import numpy as np
 import torch
-
 
 """Implementation of Pareto HyperNetworks with:
 1. Linear scalarization

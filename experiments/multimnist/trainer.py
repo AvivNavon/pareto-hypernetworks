@@ -1,18 +1,18 @@
-import json
 import argparse
+import json
 from collections import defaultdict
 from pathlib import Path
-
-from tqdm import trange
 
 import numpy as np
 import torch
 from torch import nn
-from experiments.utils import set_logger, set_seed, circle_points, count_parameters, get_device, save_args
-from phn import LinearScalarizationSolver, EPOSolver
+from tqdm import trange
 
-from experiments.multimnist.models import PHNHyper, PHNTarget
 from experiments.multimnist.data import Dataset
+from experiments.multimnist.models import PHNHyper, PHNTarget
+from experiments.utils import (circle_points, count_parameters, get_device,
+                               save_args, set_logger, set_seed)
+from phn import EPOSolver, LinearScalarizationSolver
 
 
 def evaluate(hypernet, targetnet, loader, rays, device):

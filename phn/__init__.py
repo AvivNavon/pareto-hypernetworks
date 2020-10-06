@@ -1,1 +1,1 @@
-from phn.solvers import LinearScalarizationSolver, EPOSolver
+from phn.solvers import EPOSolver, LinearScalarizationSolver
