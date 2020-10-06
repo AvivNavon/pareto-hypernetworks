@@ -13,7 +13,6 @@ from phn import LinearScalarizationSolver, EPOSolver
 
 from experiments.multimnist.models import PHNHyper, PHNTarget
 from experiments.multimnist.data import Dataset
-from experiments.multimnist.plot_utils import plot_multimnist
 
 
 def evaluate(hypernet, targetnet, loader, rays, device):
@@ -28,9 +27,7 @@ def evaluate(hypernet, targetnet, loader, rays, device):
         task1_correct, task2_correct = 0., 0.
         l1, l2 = 0., 0.
         ray = torch.from_numpy(ray.astype(np.float32)).to(device)
-
-        if not args.circle_rays:
-            ray /= ray.sum()
+        ray /= ray.sum()
 
         for batch in loader:
             hypernet.zero_grad()
@@ -196,8 +193,6 @@ def train(
             )
             test_results[f'epoch_{epoch + 1}'] = test_epoch_results
 
-            plot_multimnist(test_epoch_results, epoch=epoch+1, fig_dir=out_dir)
-
     if epoch != last_eval:
         if not no_val_eval:
             epoch_results = evaluate(hypernet=hnet, targetnet=net, loader=val_loader, rays=test_rays, device=device)
@@ -205,8 +200,6 @@ def train(
 
         test_epoch_results = evaluate(hypernet=hnet, targetnet=net, loader=test_loader, rays=test_rays, device=device)
         test_results[f'epoch_{epoch + 1}'] = test_epoch_results
-
-        plot_multimnist(test_epoch_results, epoch=epoch + 1, fig_dir=out_dir)
 
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -220,7 +213,7 @@ def train(
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='MultiMNIST')
     parser.add_argument('--datapath', type=str, default='data/multi_fashion_and_mnist.pickle', help='path to data')
-    parser.add_argument('--n-epochs', type=int, default=150, help='num. epochs')
+    parser.add_argument('--n-epochs', type=int, default=20, help='num. epochs')
     parser.add_argument('--ray-hidden', type=int, default=100, help='lower range for ray')
     parser.add_argument('--alpha', type=float, default=.2, help='alpha for dirichlet')
     parser.add_argument('--no-cuda', action='store_true', default=False, help='train on gpu')
