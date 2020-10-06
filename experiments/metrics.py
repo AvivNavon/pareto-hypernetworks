@@ -4,15 +4,6 @@ from pymoo.factory import get_performance_indicator
 
 import torch
 import numpy as np
-from experiments.baselines import MGDABaseline
-
-
-def min_norm(losses, ray, parameters):
-    solver = MGDABaseline(n_tasks=len(losses))
-    weighted_loss, sol, min_norm_val = solver.get_weighted_loss(
-        losses, ray, shared_parameters=parameters, return_sol=True
-    )
-    return min_norm_val
 
 
 def non_uniformity(losses, ray):

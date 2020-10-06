@@ -8,7 +8,7 @@ from solvers.baseline_solvers import LinearScalarizationBaseline
 from experiments.multimnist.models import PHNHyper, PHNTarget
 from experiments.multimnist.data import Dataset
 from experiments.multimnist.plot_utils import plot_multimnist
-from experiments.metrics import non_uniformity, min_norm, calc_hypervolume
+from experiments.metrics import non_uniformity, calc_hypervolume
 from solvers.baseline_solvers import EPO
 
 
@@ -45,7 +45,6 @@ def evaluate(hypernet, targetnet, loader, rays, device):
             losses = torch.stack((curr_l1, curr_l2))
             # metrics
             ray = ray.squeeze(0)
-            min_norm_val += min_norm(losses, ray, hypernet.shared_parameters()) * bs
             non_unif += non_uniformity(losses, ray) * bs
 
             # losses
