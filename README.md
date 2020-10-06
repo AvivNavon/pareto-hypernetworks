@@ -22,3 +22,11 @@ pip install -e .
 ## Run Experiments
 
 To run the experiment follow the `README.md` files within each experiment folder.
+
+## Citation
+
+If you find PHN to be useful in your own research, please consider citing the following paper:
+
+```bib
+TBD
+```
