@@ -1,7 +1,7 @@
 # MultiMNIST
 
 <p align="center"> 
-    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/resources/mmnist_fashion_and_mnist_evolve.png" width="500">
+    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/mmnist_fashion_and_mnist_evolve.png" width="500">
 </p>
 
 We use the data provided in [Pareto Multi-Task Learning](https://papers.nips.cc/paper/9374-pareto-multi-task-learning).
