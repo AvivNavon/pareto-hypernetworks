@@ -2,13 +2,13 @@
 ### Official implementation of "_Learning The Pareto Front With HyperNetworks_"
 
 <p align="center"> 
-    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/phn.png" width="400">
+    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/phn.png" width="350">
 </p>
 
 Pareto HyperNetworks (PHN) learn the entire pareto front using a single model.
 
 <p align="center"> 
-    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/toy_pf_ours.png" width="400">
+    <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/toy_pf_ours.png" width="350">
 </p>  
 
 ## Install
