@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 
 def plot_multimnist(results, epoch, fig_dir=None):
-    m = 2
     rs = np.array(results['ray'])
 
     colors = plt.cm.rainbow(np.linspace(0, 1, len(rs)))
@@ -20,6 +19,7 @@ def plot_multimnist(results, epoch, fig_dir=None):
     set_axes_style(axes=axs)
 
     plt.suptitle(f"Epoch {epoch}", size=20)
+    plt.tight_layout()
 
     if fig_dir is not None:
         fig_dir = Path(fig_dir)
@@ -37,16 +37,12 @@ def plot_multimnist(results, epoch, fig_dir=None):
 def set_axes_style(axes):
     axes[0].set_xlabel(r'$\ell_1$', size=15)
     axes[0].set_ylabel(r'$\ell_2$', size=15)
-    axes[0].xaxis.set_label_coords(1.015, -0.03)
-    axes[0].yaxis.set_label_coords(-0.01, 1.01)
     axes[0].spines['right'].set_color('none')
     axes[0].spines['top'].set_color('none')
     axes[0].set_title("Loss")
 
     axes[1].set_xlabel('Acc. 1', size=15)
     axes[1].set_ylabel('Acc. 2', size=15)
-    axes[1].xaxis.set_label_coords(1.015, -0.03)
-    axes[1].yaxis.set_label_coords(-0.01, 1.01)
     axes[1].spines['right'].set_color('none')
     axes[1].spines['top'].set_color('none')
     axes[1].set_title("Accuracy")

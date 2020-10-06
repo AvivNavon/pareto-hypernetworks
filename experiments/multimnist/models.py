@@ -6,7 +6,7 @@ import torch.nn.functional as F
 
 
 class PHNHyper(nn.Module):
-    """Modification of https://github.com/pytorch/examples/blob/master/mnist/main.py
+    """Hypernetwork
 
     """
 
@@ -73,7 +73,7 @@ class PHNHyper(nn.Module):
 
 
 class PHNTarget(nn.Module):
-    """Modification of https://github.com/pytorch/examples/blob/master/mnist/main.py
+    """Target network
 
     """
     def __init__(self, kernel_size, n_kernels=10, out_dim=10, target_hidden_dim=50, n_conv_layers=2, n_tasks=2):

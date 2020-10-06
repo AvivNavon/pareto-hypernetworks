@@ -20,7 +20,7 @@ def requirements():
 
 
 setup(
-      name='solvers',
+      name='phn',
       version='1.0.0',  # Required
       description='Pareto HyperNetworks',  # Optional
       long_description='',  # Optional

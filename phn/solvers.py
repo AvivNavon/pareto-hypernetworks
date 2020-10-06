@@ -1,24 +1,19 @@
-import logging
 from abc import abstractmethod
 
 import numpy as np
 import cvxpy as cp
 import cvxopt
 import torch
-from torch.autograd import Variable
 
 
-"""Implementation of:
+"""Implementation of Pareto HyperNetworks with:
 1. Linear scalarization
-2. PMTL
 3. EPO
-
-The EPO and PMTL implementations are modifications of the code in https://github.com/dbmptr/EPOSearch 
 
 """
 
 
-class Baseline:
+class Solver:
     def __init__(self, n_tasks):
         super().__init__()
         self.n_tasks = n_tasks
@@ -31,7 +26,10 @@ class Baseline:
         return self.get_weighted_loss(losses, ray, parameters, **kwargs)
 
 
-class LinearScalarizationBaseline(Baseline):
+class LinearScalarizationSolver(Solver):
+    """For LS we use the preference ray to weigh the losses
+
+    """
 
     def __init__(self, n_tasks):
         super().__init__(n_tasks)
@@ -40,7 +38,10 @@ class LinearScalarizationBaseline(Baseline):
         return (losses * ray).sum()
 
 
-class EPOBaseline(Baseline):
+class EPOSolver(Solver):
+    """Wrapper over EPO
+
+    """
 
     def __init__(self, n_tasks, n_params):
         super().__init__(n_tasks)
@@ -52,10 +53,7 @@ class EPOBaseline(Baseline):
 
 
 class EPO:
-    """I think it will be good is we could take in the losses (of shape (n_tasks, )) and ray, and return
-    the weighted loss (according to beta^*)
 
-    """
     def __init__(self, n_tasks, n_params):
         self.n_tasks = n_tasks
         self.n_params = n_params
@@ -68,11 +66,8 @@ class EPO:
         return torch.cat(tuple(g.reshape(-1, ) for i, g in enumerate(grad)), axis=0)
 
     def get_weighted_loss(self, losses, ray, parameters):
-        # todo: this normalization was added by us, not sure we need it
-        # ray = ray / ray.sum()
         lp = ExactParetoLP(m=self.n_tasks, n=self.n_params, r=ray.cpu().numpy())
 
-        # for now I mainly stick to their implementation, we can modify later
         grads = []
         for i, loss in enumerate(losses):
             g = torch.autograd.grad(loss, parameters, retain_graph=True)
@@ -86,7 +81,6 @@ class EPO:
         numpy_losses = losses.detach().cpu().numpy()
 
         try:
-            # Calculate the alphas (betas in paper?) from the LP solver
             alpha = lp.get_alpha(numpy_losses, G=GG_T, C=True)
         except Exception as excep:
             print(excep)
@@ -103,6 +97,9 @@ class EPO:
 
 
 class ExactParetoLP(object):
+    """modifications of the code in https://github.com/dbmptr/EPOSearch
+
+    """
 
     def __init__(self, m, n, r, eps=1e-4):
         cvxopt.glpk.options["msg_lev"] = "GLP_MSG_OFF"
@@ -152,14 +149,12 @@ class ExactParetoLP(object):
             else:
                 self.rhs.value = np.zeros_like(self.Ca.value)
             self.gamma = self.prob_bal.solve(solver=cp.GLPK, verbose=False)
-            # self.gamma = self.prob_bal.solve(verbose=False)
             self.last_move = "bal"
         else:
             if relax:
                 self.gamma = self.prob_rel.solve(solver=cp.GLPK, verbose=False)
             else:
                 self.gamma = self.prob_dom.solve(solver=cp.GLPK, verbose=False)
-            # self.gamma = self.prob_dom.solve(verbose=False)
             self.last_move = "dom"
 
         return self.alpha.value
