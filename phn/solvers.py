@@ -9,6 +9,8 @@ import torch
 1. Linear scalarization
 3. EPO
 
+
+EPO code from: https://github.com/dbmptr/EPOSearch
 """
 
 
