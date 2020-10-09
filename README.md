@@ -1,5 +1,6 @@
 # Pareto HyperNetworks 
-### Official implementation of "_Learning The Pareto Front With HyperNetworks_"
+
+Official implementation of ["_Learning The Pareto Front With HyperNetworks_"](https://arxiv.org/abs/2010.04104).
 
 <p align="center"> 
     <img src="https://github.com/AvivNavon/pareto-hypernetworks/blob/master/resources/phn.png" width="350">
