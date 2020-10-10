@@ -29,5 +29,9 @@ To run the experiment follow the `README.md` files within each experiment folder
 If you find PHN to be useful in your own research, please consider citing the following paper:
 
 ```bib
-TBD
+@inproceedings{Navon2020LearningTP,
+  title={Learning the Pareto Front with Hypernetworks},
+  author={A. Navon and Aviv Shamsian and Gal Chechik and Ethan Fetaya},
+  year={2020}
+}
 ```
