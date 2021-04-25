@@ -1,3 +1,4 @@
+import logging
 import argparse
 import json
 from collections import defaultdict
@@ -9,12 +10,13 @@ from torch import nn
 from tqdm import trange
 
 from experiments.multimnist.data import Dataset
-from experiments.multimnist.models import PHNHyper, PHNTarget
+from experiments.multimnist.models import LeNetHyper, LeNetTarget, ResnetHyper, ResNetTarget
 from experiments.utils import (circle_points, count_parameters, get_device,
                                save_args, set_logger, set_seed)
 from phn import EPOSolver, LinearScalarizationSolver
 
 
+@torch.no_grad()
 def evaluate(hypernet, targetnet, loader, rays, device):
     hypernet.eval()
     loss1 = nn.CrossEntropyLoss()
@@ -66,7 +68,8 @@ def train(
         path,
         solver_type: str,
         epochs: int,
-        ray_hidden: int,
+        hidden_dim: int,
+        model: str,
         lr: float,
         wd: float,
         bs: int,
@@ -77,12 +80,25 @@ def train(
         out_dir: str,
         device: torch.device,
         eval_every: int,
+        resnet_size: str
 ) -> None:
     # ----
     # Nets
     # ----
-    hnet: nn.Module = PHNHyper([9, 5], ray_hidden_dim=ray_hidden)
-    net: nn.Module = PHNTarget([9, 5])
+    if model == 'lenet':
+        hnet: nn.Module = LeNetHyper([9, 5], ray_hidden_dim=hidden_dim)
+        net: nn.Module = LeNetTarget([9, 5])
+    else:
+        hn_config = {
+            '11M': {'num_chunks': 105, 'num_ws': 11},
+            '5M': {'num_chunks': 230, 'num_ws': 5},
+            '2M': {'num_chunks': 577, 'num_ws': 2},
+            '1M': {'num_chunks': 1150, 'num_ws': 1}
+        }
+        hnet: nn.Module = ResnetHyper(hidden_dim=hidden_dim, **hn_config[resnet_size])
+        net: nn.Module = ResNetTarget()
+
+    logging.info(f"HN size: {count_parameters(hnet)}")
 
     hnet = hnet.to(device)
     net = net.to(device)
@@ -216,6 +232,11 @@ if __name__ == '__main__':
     parser.add_argument('--n-epochs', type=int, default=150, help='num. epochs')
     parser.add_argument('--ray-hidden', type=int, default=100, help='lower range for ray')
     parser.add_argument('--alpha', type=float, default=.2, help='alpha for dirichlet')
+    parser.add_argument('--model', type=str, default='lenet', choices=['lenet', 'resnet'], help='model name')
+    parser.add_argument(
+        '--resnet-size', type=str, default='11M', choices=['11M', '5M', '2M', '1M'],
+        help='ResNet size key. Only used if model set to resnet'
+    )
     parser.add_argument('--no-cuda', action='store_true', default=False, help='train on gpu')
     parser.add_argument('--gpus', type=str, default='0', help='gpu device')
     parser.add_argument('--batch-size', type=int, default=256, help='batch size')
@@ -237,7 +258,8 @@ if __name__ == '__main__':
         path=args.datapath,
         solver_type=args.solver,
         epochs=args.n_epochs,
-        ray_hidden=args.ray_hidden,
+        hidden_dim=args.ray_hidden,
+        model=args.model,
         lr=args.lr,
         wd=args.wd,
         bs=args.batch_size,
@@ -247,7 +269,8 @@ if __name__ == '__main__':
         val_size=args.val_size,
         n_rays=args.n_rays,
         alpha=args.alpha,
-        out_dir=args.out_dir
+        out_dir=args.out_dir,
+        resnet_size=args.resnet_size
     )
 
     save_args(folder=args.out_dir, args=args)
