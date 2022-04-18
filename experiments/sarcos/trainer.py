@@ -63,7 +63,7 @@ def evaluate(hypernet, targetnet, loader, rays, device):
             7,
         ),
     )
-    results["hv"] = hv.calc(np.array(results["loss"]))
+    results["hv"] = hv.do(np.array(results["loss"]))
 
     return results
 
