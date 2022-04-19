@@ -11,7 +11,7 @@ def get_data(dataroot):
     path = Path(dataroot)
     # https://github.com/Kaixhin/SARCOS/blob/master/data.py
     train_data = loadmat(path / "sarcos_inv.mat")["sarcos_inv"].astype(np.float32)
-    val_data, train_data = train_data[:4448], train_data[4448:].astype(np.float32)
+    val_data, train_data = train_data[:4448], train_data[4448:]
     test_data = loadmat(path / "sarcos_inv_test.mat")["sarcos_inv_test"].astype(
         np.float32
     )
@@ -24,7 +24,6 @@ def get_data(dataroot):
     Y_train /= quant
     Y_val /= quant
     Y_test /= quant
-
     logging.info(
         f"training examples: {len(X_train)}, validation {len(X_val)}, test {len(X_test)}"
     )

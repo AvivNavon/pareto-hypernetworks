@@ -257,7 +257,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--no-val-eval",
         action="store_true",
-        default=False,
+        default=True,
         help="evaluate on validation",
     )
     parser.add_argument("--clip", type=float, default=-1, help="grad clipping")
