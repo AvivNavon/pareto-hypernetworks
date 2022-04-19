@@ -138,7 +138,6 @@ def train(
     last_eval = -1
     epoch_iter = trange(epochs)
     test_hv = -1.
-    val_hv = -1.
 
     val_results = dict()
     test_results = dict()
@@ -169,7 +168,7 @@ def train(
             loss.backward()
             epoch_iter.set_description(
                 f"total weighted loss: {loss.item():.3f}, MSE: {losses.mean().item():.3f}, "
-                f"val. HV {val_hv:.4f}, test HV {test_hv:.4f}"
+                f"test HV {test_hv:.4f}"
             )
 
             # grad clip
@@ -189,7 +188,6 @@ def train(
                     device=device,
                 )
                 val_results[f"epoch_{epoch + 1}"] = epoch_results
-                val_hv = epoch_results["hv"]
 
             test_epoch_results = evaluate(
                 hypernet=hnet,
