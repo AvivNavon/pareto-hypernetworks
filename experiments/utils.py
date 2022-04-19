@@ -9,8 +9,8 @@ import torch
 
 def set_logger():
     logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=logging.INFO,
     )
 
 
@@ -36,11 +36,13 @@ def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 
-def get_device(no_cuda=False, gpus='0'):
-    return torch.device(f"cuda:{gpus}" if torch.cuda.is_available() and not no_cuda else "cpu")
+def get_device(no_cuda=False, gpus="0"):
+    return torch.device(
+        f"cuda:{gpus}" if torch.cuda.is_available() and not no_cuda else "cpu"
+    )
 
 
-def save_args(folder, args, name='config.json', check_exists=False):
+def save_args(folder, args, name="config.json", check_exists=False):
     set_logger()
     path = Path(folder)
     if check_exists:
@@ -48,10 +50,7 @@ def save_args(folder, args, name='config.json', check_exists=False):
             logging.warning(f"folder {folder} already exists! old files might be lost.")
     path.mkdir(parents=True, exist_ok=True)
 
-    json.dump(
-        vars(args),
-        open(path / name, "w")
-    )
+    json.dump(vars(args), open(path / name, "w"))
 
 
 def circle_points(K, min_angle=None, max_angle=None):

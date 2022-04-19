@@ -5,13 +5,12 @@ from sklearn.model_selection import train_test_split
 
 
 class Dataset:
-
     def __init__(self, path, val_size=0):
         self.path = path
         self.val_size = val_size
 
     def get_datasets(self):
-        with open(self.path, 'rb') as f:
+        with open(self.path, "rb") as f:
             trainX, trainLabel, testX, testLabel = pickle.load(f)
 
         n_train = len(trainX)
